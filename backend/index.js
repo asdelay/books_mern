@@ -63,6 +63,32 @@ app.post('/books', async (req, res)=>{
     }
 })
 
+//Route for updating a book
+app.put('/books/:id', async (req, res) => {
+    try{
+        if(
+            !req.body.title ||
+            !req.body.author ||
+            !req.body.publishYear
+        ) {
+            res.status(400).send("You must send all required fields: title, author and publishYear")
+        }
+        const {id} = req.params;
+
+        const result = await Book.findByIdAndUpdate(id, req.body);
+
+        if(!result){
+            return res.status(404).send("No such book found")
+        }
+
+        return res.status(200).send("Book was updated succesfuly")
+
+    } catch (e) {
+        console.log(e.message)
+        return res.status(500).send(e.message)
+    }
+})
+
 mongoose.connect(mongoDBURL)
     .then(()=>{
         console.log('Successfully connected to db!')
