@@ -71,7 +71,7 @@ app.put('/books/:id', async (req, res) => {
             !req.body.author ||
             !req.body.publishYear
         ) {
-            res.status(400).send("You must send all required fields: title, author and publishYear")
+            return res.status(400).send("You must send all required fields: title, author and publishYear")
         }
         const {id} = req.params;
 
@@ -81,11 +81,26 @@ app.put('/books/:id', async (req, res) => {
             return res.status(404).send("No such book found")
         }
 
-        return res.status(200).send("Book was updated succesfuly")
+        return res.status(200).send("Book was updated successfully")
 
     } catch (e) {
         console.log(e.message)
         return res.status(500).send(e.message)
+    }
+})
+
+//Route for deleting a book
+app.delete('/books/:id', async (req, res)=>{
+    try{
+        const {id} = req.params;
+        const result = await Book.findByIdAndDelete(id)
+        if(!result){
+            return res.status(404).send("Book not found")
+        }
+        return res.status(200).send('Book has been deleted')
+    } catch(e){
+        console.log(e.message)
+        return res.status(500).send({message: e.message})
     }
 })
 
