@@ -9,15 +9,20 @@ const app = express();
 //Middleware for parsing request body
 app.use(express.json());
 
+//Middleware for CORS
+app.use(cors());
+// app.use(cors({
+//     origin: 'https://localhost:3000',
+//     methods: ['GET','POST','PUT','DELETE'],
+//     allowedHeaders: ['Content-Type'],
+// }));
+
 //middleware for routes
 app.use('/books', booksRoute)
 
-//Middleware for CORS
-app.use(cors({
-    origin: 'https://localhost:3000',
-    methods: ['GET','POST','PUT','DELETE'],
-    allowedHeaders: ['Content-Type'],
-}));
+
+
+
 //Root route
 app.get('/', (req, res) => {
     console.log(req);
